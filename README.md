@@ -1,5 +1,5 @@
 **NOTE: A fork of this project using the newer Leap SDK can be found at [https://github.com/tomh4/matleap](https://github.com/tomh4/matleap).**
-
+**NOTE: Included Leap::Gesture capturing**
 # Matleap: MATLAB Interface to the Leap Motion Controller
 
 This MATLAB mex-file will allow you to get data from a Leap Motion
