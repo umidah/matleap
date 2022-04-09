@@ -5,6 +5,7 @@
 /// @date 2013-09-12
 
 #include "matleap.h"
+#define DEBUG_LEVEL 0 // 1 if debug = true
 
 // Under Windows, a Leap::Controller must be allocated after the MEX
 // startup code has completed.  Also, a Leap::Controller must be
@@ -136,6 +137,7 @@ void get_frame (int nlhs, mxArray *plhs[])
         "timestamp",
         "pointables",
         "hands",
+        "Gesture",
         "version"
     };
     int frame_fields = sizeof (frame_field_names) / sizeof (*frame_field_names);
@@ -144,6 +146,32 @@ void get_frame (int nlhs, mxArray *plhs[])
     mxSetFieldByNumber (plhs[0], 0, 0, mxCreateDoubleScalar (f.id));
     mxSetFieldByNumber (plhs[0], 0, 1, mxCreateDoubleScalar (f.timestamp));
     // create the pointables structs
+    if (f.Gestures.count () > 0) 
+    {
+        const char *gesture_field_names[] = {
+            "Duration",
+            "DurationSeconds",
+            "Id",
+            "IsValid",
+            "Type"
+        };
+        int gesture_fields = sizeof (gesture_field_names) / sizeof (*gesture_field_names);
+        // if (f.Gestures.count ()) mexPrintf("%i\n", f.Gestures.count ());
+        mxArray *p = mxCreateStructMatrix (1, f.Gestures.count (), gesture_fields, gesture_field_names);
+        mxSetFieldByNumber (plhs[0], 0, 4, p);
+
+        // fill the gesture structs
+        for (size_t i = 0; i < f.Gestures.count (); ++i)
+        {
+            mxSetFieldByNumber (p, i, 0, mxCreateDoubleScalar (f.Gestures[i].duration ()));
+            mxSetFieldByNumber (p, i, 1, mxCreateDoubleScalar (f.Gestures[i].durationSeconds ()));
+            mxSetFieldByNumber (p, i, 2, mxCreateDoubleScalar (f.Gestures[i].id ()));
+            mxSetFieldByNumber (p, i, 3, mxCreateDoubleScalar (f.Gestures[i].isValid ()));
+            mxSetFieldByNumber (p, i, 4, mxCreateDoubleScalar (f.Gestures[i].type ()));
+        }
+    }
+
+    
 
     if (f.pointables.count () > 0)
     {
@@ -321,7 +349,7 @@ void get_frame (int nlhs, mxArray *plhs[])
         } // re: for f.hands.count()
     } // re: if f.hands.count() > 0
 
-    mxSetFieldByNumber (plhs[0], 0, 4, mxCreateDoubleScalar (version));
+    mxSetFieldByNumber (plhs[0], 0, 5, mxCreateDoubleScalar (version));
 }
 
 void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
@@ -329,6 +357,7 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     if (!fg)
     {
         fg = new matleap::frame_grabber;
+        fg->set_debug(DEBUG_LEVEL);
         if (fg == 0)
             mexErrMsgTxt ("Cannot allocate a frame grabber");
         mexAtExit (matleap_exit);

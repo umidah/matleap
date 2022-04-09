@@ -23,6 +23,7 @@ struct frame
     int64_t timestamp;
     Leap::PointableList pointables;
     Leap::HandList hands;
+    Leap::GestureList Gestures;
 };
 
 /// @brief leap frame grabber interface
@@ -39,6 +40,10 @@ class frame_grabber
     {
         // receive frames even when you don't have focus
         controller.setPolicyFlags (Leap::Controller::POLICY_BACKGROUND_FRAMES);
+        controller.enableGesture (Leap::Gesture::TYPE_SWIPE);
+        controller.enableGesture (Leap::Gesture::TYPE_KEY_TAP);
+        controller.enableGesture (Leap::Gesture::TYPE_SCREEN_TAP);
+        controller.enableGesture (Leap::Gesture::TYPE_CIRCLE);
     }
     /// @brief destructor
     ~frame_grabber ()
@@ -64,11 +69,14 @@ class frame_grabber
     {
         const Leap::Frame &f = controller.frame ();
         current_frame.id = f.id ();
-        if (debug)
+        if (debug) {
             mexPrintf ("Got frame with id %d\n", current_frame.id);
+            // mexPrintf ("Got frame with gestures: %d\n", current_frame.Gestures.count());
+        }
         current_frame.timestamp = f.timestamp ();
         current_frame.pointables = f.pointables ();
         current_frame.hands = f.hands ();
+        current_frame.Gestures = f.gestures ();
         return current_frame;
     }
 };

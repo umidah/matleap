@@ -44,42 +44,45 @@ end
 
 % print the contents of a leap frame
 function print(f)
-    fprintf('frame id %d\n',f.id);
-    fprintf('frame timestamp %d\n',f.timestamp);
-    fprintf('frame pointables %d\n',length(f.pointables));
-    fprintf('frame hands %d\n',length(f.hands));
-    for i=1:length(f.pointables)
-        fprintf('pointable %d\n',i);
-        fprintf('\tid ');
-        fprintf('%d',f.pointables(i).id);
-        fprintf('\n');
-        fprintf('\tposition ');
-        fprintf(' %f',f.pointables(i).position);
-        fprintf('\n');
-        fprintf('\tvelocity ');
-        fprintf(' %f',f.pointables(i).velocity);
-        fprintf('\n');
-        fprintf('\tdirection ');
-        fprintf(' %f',f.pointables(i).direction);
-        fprintf('\n');
-    end
-    
-    for i=1:length(f.hands)
-        fprintf('hand %d\n',i);
-        fprintf('\tpalm position ');
-        fprintf(' %f',f.hands(i).palm_position); 
-        fprintf('\n');
-        
-        fprintf('\tsphere radius ');
-        fprintf(' %f',f.hands(i).sphere_radius); 
-        fprintf('\n');
-        
-        fprintf('\tis right ');
-        fprintf(' %f',f.hands(i).is_right); 
-        fprintf('\n');
-        
-        fprintf('\tis left ');
-        fprintf(' %f',f.hands(i).is_left); 
-        fprintf('\n');
+%     fprintf('frame id %d\n',f.id);
+%     fprintf('frame timestamp %d\n',f.timestamp);
+%     fprintf('frame pointables %d\n',length(f.pointables));
+%     fprintf('frame hands %d\n',length(f.hands));
+%     for i=1:length(f.pointables)
+%         fprintf('pointable %d\n',i);
+%         fprintf('\tid ');
+%         fprintf('%d',f.pointables(i).id);
+%         fprintf('\n');
+%         fprintf('\tposition ');
+%         fprintf(' %f',f.pointables(i).position);
+%         fprintf('\n');
+%         fprintf('\tvelocity ');
+%         fprintf(' %f',f.pointables(i).velocity);
+%         fprintf('\n');
+%         fprintf('\tdirection ');
+%         fprintf(' %f',f.pointables(i).direction);
+%         fprintf('\n');
+%     end
+%     
+%     for i=1:length(f.hands)
+%         fprintf('hand %d\n',i);
+%         fprintf('\tpalm position ');
+%         fprintf(' %f',f.hands(i).palm_position); 
+%         fprintf('\n');
+%         
+%         fprintf('\tsphere radius ');
+%         fprintf(' %f',f.hands(i).sphere_radius); 
+%         fprintf('\n');
+%         
+%         fprintf('\tis right ');
+%         fprintf(' %f',f.hands(i).is_right); 
+%         fprintf('\n');
+%         
+%         fprintf('\tis left ');
+%         fprintf(' %f',f.hands(i).is_left); 
+%         fprintf('\n');
+%     end
+    if ~isempty(f.Gesture)
+        f.Gesture
     end
 end
